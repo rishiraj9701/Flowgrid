@@ -63,69 +63,85 @@ function WorkspaceDropdown() {
     };
 
     return (
-        <div className="relative m-4" ref={dropdownRef}>
-            <button onClick={() => setIsOpen(prev => !prev)} className="w-full flex items-center justify-between p-3 h-auto text-left rounded hover:bg-gray-100 dark:hover:bg-zinc-800" >
-                <div className="flex items-center gap-3">
-                    <img src={currentWorkspace?.image_url || "/favicon.ico"} alt={currentWorkspace?.name || "Workspace"} className="w-8 h-8 rounded shadow object-cover" />
+        <div className="relative mb-2" ref={dropdownRef}>
+            <button
+                type="button"
+                onClick={() => setIsOpen((prev) => !prev)}
+                className="w-full flex items-center justify-between p-2.5 rounded-2xl text-left bg-slate-100/90 dark:bg-slate-800/60 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 border border-slate-200/90 dark:border-slate-800 transition-colors cursor-pointer group shadow-2xs"
+            >
+                <div className="flex items-center gap-2.5 min-w-0">
+                    <img
+                        src={currentWorkspace?.image_url || "/favicon.ico"}
+                        alt={currentWorkspace?.name || "Workspace"}
+                        className="size-7 rounded-xl shadow-2xs border border-slate-200/80 dark:border-slate-700 object-cover shrink-0"
+                    />
                     <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-gray-800 dark:text-white text-sm truncate">
+                        <p className="font-bold text-slate-900 dark:text-white text-xs truncate leading-tight">
                             {currentWorkspace?.name || "Select Workspace"}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-zinc-400 truncate">
+                        <p className="text-[11px] text-slate-400 dark:text-slate-500 truncate leading-tight mt-0.5">
                             {workspaces.length} workspace{workspaces.length !== 1 ? "s" : ""}
                         </p>
                     </div>
                 </div>
-                <ChevronDown className="w-4 h-4 text-gray-500 dark:text-zinc-400 flex-shrink-0" />
+                <ChevronDown className="size-3.5 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors shrink-0 ml-1.5" />
             </button>
 
             {isOpen && (
-                <div className="absolute z-50 w-64 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded shadow-lg top-full left-0">
-                    <div className="p-2 max-h-60 overflow-y-auto">
-                        <p className="text-xs text-gray-500 dark:text-zinc-400 uppercase tracking-wider mb-2 px-2">
+                <div className="absolute z-50 w-64 bg-white/95 dark:bg-[#111726]/95 backdrop-blur-xl border border-slate-200/90 dark:border-slate-800 rounded-2xl shadow-xl top-full left-0 mt-1.5 py-1 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+                    <div className="p-1.5 max-h-60 overflow-y-auto">
+                        <p className="text-[10px] text-zinc-400 dark:text-zinc-500 uppercase font-bold tracking-wider px-2 py-1">
                             Workspaces
                         </p>
                         {workspaces.map((ws) => (
-                            <div key={ws.id} onClick={() => onSelectWorkspace(ws.id)} className="flex items-center gap-3 p-2 cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-zinc-800" >
-                                <img src={ws.image_url || "/favicon.ico"} alt={ws.name} className="w-6 h-6 rounded object-cover" />
+                            <div
+                                key={ws.id}
+                                onClick={() => onSelectWorkspace(ws.id)}
+                                className="flex items-center gap-2.5 px-2.5 py-1.5 cursor-pointer rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800/70 transition-colors"
+                            >
+                                <img
+                                    src={ws.image_url || "/favicon.ico"}
+                                    alt={ws.name}
+                                    className="size-6 rounded-md object-cover border border-zinc-200/80 dark:border-zinc-700 shrink-0"
+                                />
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-gray-800 dark:text-white truncate">
+                                    <p className="text-xs font-medium text-zinc-900 dark:text-zinc-100 truncate">
                                         {ws.name}
                                     </p>
-                                    <p className="text-xs text-gray-500 dark:text-zinc-400 truncate">
+                                    <p className="text-[10px] text-zinc-400 dark:text-zinc-500 truncate">
                                         {ws.membersCount || ws._count?.members || ws.members?.length || 1} members
                                     </p>
                                 </div>
                                 {currentWorkspace?.id === ws.id && (
-                                    <Check className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                                    <Check className="size-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
                                 )}
                             </div>
                         ))}
                     </div>
 
-                    <hr className="border-gray-200 dark:border-zinc-700" />
+                    <div className="border-t border-zinc-100 dark:border-zinc-800/80" />
 
-                    <div 
+                    <div
                         onClick={() => {
                             setIsOpen(false);
                             setIsCreateModalOpen(true);
                         }}
-                        className="p-2 cursor-pointer rounded group hover:bg-gray-100 dark:hover:bg-zinc-800" 
+                        className="px-2 py-1.5 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/70 transition-colors"
                     >
-                        <p className="flex items-center text-xs gap-2 my-1 w-full text-blue-600 dark:text-blue-400 group-hover:text-blue-500 dark:group-hover:text-blue-300 font-medium">
-                            <Plus className="w-4 h-4" /> Create Workspace
+                        <p className="flex items-center text-xs gap-2 px-1 py-0.5 text-blue-600 dark:text-blue-400 font-medium">
+                            <Plus className="size-3.5" /> Create Workspace
                         </p>
                     </div>
 
-                    <div 
+                    <div
                         onClick={() => {
                             setIsOpen(false);
                             navigate('/workspaces');
                         }}
-                        className="p-2 cursor-pointer rounded group hover:bg-gray-100 dark:hover:bg-zinc-800 border-t border-gray-100 dark:border-zinc-800" 
+                        className="px-2 py-1.5 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/70 border-t border-zinc-100 dark:border-zinc-800/80 transition-colors"
                     >
-                        <p className="flex items-center text-xs gap-2 my-1 w-full text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white font-medium">
-                            <Layers className="w-4 h-4" /> All Workspaces & Join
+                        <p className="flex items-center text-xs gap-2 px-1 py-0.5 text-zinc-600 dark:text-zinc-400 font-medium">
+                            <Layers className="size-3.5" /> All Workspaces &amp; Join
                         </p>
                     </div>
                 </div>

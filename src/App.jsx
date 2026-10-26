@@ -6,15 +6,22 @@ import { Toaster } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import { fetchCurrentUser } from "./features/authSlice";
 import { fetchWorkspacesAsync } from "./features/workspaceSlice";
+import { loadTheme } from "./features/themeSlice";
 
 // Route-level code splitting
 const Landing = lazy(() => import("./pages/Landing"));
 const WorkspaceOnboarding = lazy(() => import("./pages/WorkspaceOnboarding"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Projects = lazy(() => import("./pages/Projects"));
+const Tasks = lazy(() => import("./pages/Tasks"));
+const Calendar = lazy(() => import("./pages/Calendar"));
+const Analytics = lazy(() => import("./pages/Analytics"));
 const Team = lazy(() => import("./pages/Team"));
+const Settings = lazy(() => import("./pages/Settings"));
+const Help = lazy(() => import("./pages/Help"));
 const ProjectDetails = lazy(() => import("./pages/ProjectDetails"));
 const TaskDetails = lazy(() => import("./pages/TaskDetails"));
+
 
 const PageLoading = () => (
     <div className="flex items-center justify-center min-h-screen bg-zinc-50 dark:bg-zinc-950">
@@ -26,6 +33,10 @@ const App = () => {
     const dispatch = useDispatch();
     const { isAuthenticated, isDemoMode, isInitialized, token } = useSelector((state) => state.auth);
     const { workspaces, hasFetched, loading: workspaceLoading } = useSelector((state) => state.workspace);
+
+    useEffect(() => {
+        dispatch(loadTheme());
+    }, [dispatch]);
 
     useEffect(() => {
         if (token) {
@@ -86,8 +97,13 @@ const App = () => {
                     <Route path="/workspaces" element={<WorkspaceOnboarding />} />
                     <Route path="/" element={<Layout />}>
                         <Route index element={<Dashboard />} />
-                        <Route path="team" element={<Team />} />
+                        <Route path="tasks" element={<Tasks />} />
+                        <Route path="calendar" element={<Calendar />} />
+                        <Route path="analytics" element={<Analytics />} />
                         <Route path="projects" element={<Projects />} />
+                        <Route path="team" element={<Team />} />
+                        <Route path="settings" element={<Settings />} />
+                        <Route path="help" element={<Help />} />
                         <Route path="projectsDetail" element={<ProjectDetails />} />
                         <Route path="taskDetails" element={<TaskDetails />} />
                     </Route>

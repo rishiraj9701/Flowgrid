@@ -1,8 +1,20 @@
 import { useState, useEffect } from "react";
-import { Building2, XIcon, RotateCcw, Check } from "lucide-react";
+import { Building2, RotateCcw, Check } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { updateWorkspaceAsync, resetToDefaultData } from "../features/workspaceSlice";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 const WorkspaceSettingsDialog = ({ isDialogOpen, setIsDialogOpen }) => {
     const dispatch = useDispatch();
@@ -68,101 +80,93 @@ const WorkspaceSettingsDialog = ({ isDialogOpen, setIsDialogOpen }) => {
         }
     };
 
-    if (!isDialogOpen || !currentWorkspace) return null;
+    if (!currentWorkspace) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/20 dark:bg-black/60 backdrop-blur flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 w-full max-w-md text-zinc-900 dark:text-zinc-200 relative shadow-2xl space-y-5">
-                <button
-                    className="absolute top-3.5 right-3.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
-                    onClick={() => setIsDialogOpen(false)}
-                    aria-label="Close"
-                >
-                    <XIcon className="size-4" />
-                </button>
-
-                {/* Header */}
-                <div>
-                    <h2 className="text-lg font-semibold flex items-center gap-2 text-zinc-900 dark:text-white">
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent className="max-w-md">
+                <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
                         <Building2 className="size-5 text-blue-500" />
-                        Workspace Settings
-                    </h2>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                        <span>Workspace Settings</span>
+                    </DialogTitle>
+                    <DialogDescription>
                         Configure general workspace information and settings.
-                    </p>
-                </div>
+                    </DialogDescription>
+                </DialogHeader>
 
                 <form onSubmit={handleSave} className="space-y-4">
                     {/* Workspace Name */}
-                    <div className="space-y-1">
-                        <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                            Workspace Name *
-                        </label>
-                        <input
+                    <div className="space-y-1.5">
+                        <Label htmlFor="ws-name">Workspace Name *</Label>
+                        <Input
+                            id="ws-name"
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Engineering, Marketing..."
-                            className="w-full px-3 py-2 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="h-10"
                             required
                         />
                     </div>
 
                     {/* Description */}
-                    <div className="space-y-1">
-                        <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                            Description
-                        </label>
-                        <textarea
+                    <div className="space-y-1.5">
+                        <Label htmlFor="ws-desc">Description</Label>
+                        <Textarea
+                            id="ws-desc"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Optional workspace description"
-                            className="w-full px-3 py-2 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 h-20 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="h-20 resize-none"
                         />
                     </div>
 
                     {/* Reset to Demo Data option */}
-                    <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
+                    <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
                         <div>
-                            <p className="text-xs font-medium text-zinc-800 dark:text-zinc-200">
+                            <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
                                 Demo Dataset
                             </p>
                             <p className="text-[11px] text-zinc-400">
                                 Restore original mock projects and tasks
                             </p>
                         </div>
-                        <button
+                        <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
                             onClick={handleReset}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300 transition"
+                            className="gap-1.5"
                         >
                             <RotateCcw className="size-3" />
-                            Reset Data
-                        </button>
+                            <span>Reset Data</span>
+                        </Button>
                     </div>
 
                     {/* Footer */}
-                    <div className="flex justify-end gap-2.5 pt-3 border-t border-zinc-100 dark:border-zinc-800/80">
-                        <button
+                    <DialogFooter className="gap-2 sm:gap-0 pt-3 border-t border-zinc-100 dark:border-zinc-800/80">
+                        <Button
                             type="button"
+                            variant="outline"
                             onClick={() => setIsDialogOpen(false)}
-                            className="px-4 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
                         >
                             Cancel
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                             type="submit"
                             disabled={isSaving}
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-medium transition shadow-sm"
+                            className="gap-1.5"
                         >
                             <Check className="size-3.5" />
-                            {isSaving ? "Saving..." : "Save Changes"}
-                        </button>
-                    </div>
+                            <span>{isSaving ? "Saving..." : "Save Changes"}</span>
+                        </Button>
+                    </DialogFooter>
                 </form>
-            </div>
-        </div>
+            </DialogContent>
+        </Dialog>
     );
 };
 
 export default WorkspaceSettingsDialog;
+

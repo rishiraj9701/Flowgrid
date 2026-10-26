@@ -1,8 +1,15 @@
-# 🚀 Project Management Platform — Modern Full-Stack SaaS Workspace
+# 🚀 Flowgrid — Modern Full-Stack SaaS Workspace & Task Tracker
 
-An enterprise-grade, high-performance **Full-Stack Project & Task Management Web Application** built with **React 19**, **Vite**, **Redux Toolkit**, **Tailwind CSS**, and backed by **Node.js**, **Express**, **Prisma ORM**, and **PostgreSQL**.
+[![GitHub Repository](https://img.shields.io/badge/GitHub-rishiraj9701%2FFlowgrid-181717?style=flat&logo=github)](https://github.com/rishiraj9701/Flowgrid)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE.md)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933?style=flat&logo=node.js)](https://nodejs.org/)
+[![React 19](https://img.shields.io/badge/React-19.1-61DAFB?style=flat&logo=react)](https://react.dev/)
+[![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon_Serverless-4169E1?style=flat&logo=postgresql)](https://neon.tech/)
 
-Designed with a modern Linear/Jira-inspired aesthetic, the platform features multi-tenant workspaces, interactive task boards, calendar scheduling, data analytics charts, team collaboration, persistent discussions, role-based authorization, and dual-mode operation (Offline Demo Mode & Authenticated Connected Mode).
+An enterprise-grade, high-performance **Full-Stack Project & Task Management Web Application** built with **React 19**, **Vite**, **Redux Toolkit**, **Tailwind CSS v4**, and backed by **Node.js**, **Express**, **Prisma ORM**, and **PostgreSQL**.
+
+Designed with a modern Linear/Jira-inspired aesthetic, Flowgrid features multi-tenant workspaces, interactive task boards, calendar scheduling, data analytics charts, team collaboration, persistent discussions, role-based authorization, and dual-mode operation (Offline Demo Mode & Authenticated Connected Mode).
 
 ---
 
@@ -62,7 +69,7 @@ Designed with a modern Linear/Jira-inspired aesthetic, the platform features mul
 | **Frontend Framework** | React 19, Vite 7 |
 | **State Management** | Redux Toolkit (`@reduxjs/toolkit`), React-Redux |
 | **Routing** | React Router DOM v7 (with lazy-loaded route code splitting) |
-| **Styling** | Tailwind CSS v4, `@tailwindcss/vite` |
+| **Styling** | Tailwind CSS v4, `@tailwindcss/vite`, Radix UI |
 | **Data Visualization** | Recharts v3 |
 | **Date Utilities** | date-fns v4 |
 | **Backend Runtime** | Node.js (ESM), Express.js |
@@ -75,15 +82,17 @@ Designed with a modern Linear/Jira-inspired aesthetic, the platform features mul
 ## 📁 Project Architecture & Directory Structure
 
 ```
-project-management-main/
+Flowgrid/
 ├── package.json                 # Root scripts for frontend and server
-├── vite.config.js               # Vite config with React, Tailwind, proxy & chunk splitting
+├── vite.config.js               # Vite config with React, Tailwind v4, proxy & chunk splitting
 ├── index.html                   # HTML template with metadata & OpenGraph tags
+├── jsconfig.json                # Path mapping configuration
 ├── server/                      # Dedicated Express + Prisma backend
 │   ├── package.json             # Server dependencies & scripts
 │   ├── .env.example             # Backend environment template
 │   ├── prisma/
 │   │   ├── schema.prisma        # PostgreSQL relational schema
+│   │   ├── migrations/          # Version-controlled migrations
 │   │   └── seed.js              # Idempotent demo dataset seeder
 │   ├── src/
 │   │   ├── app.js               # Express application configuration & route mounts
@@ -97,8 +106,10 @@ project-management-main/
 │       ├── app.test.js          # Foundation tests
 │       ├── auth.test.js         # Authentication & authorization tests
 │       └── api.test.js          # Core REST API & IDOR protection tests
-└── src/                         # React frontend (preserved intact)
+└── src/                         # React frontend
     ├── App.jsx                  # Main route switch with lazy loading & auth restore
+    ├── main.jsx                 # React root entrypoint
+    ├── index.css                # Global Tailwind CSS styles
     ├── services/
     │   └── api.js               # Centralized Fetch API client with bearer token
     ├── features/
@@ -107,20 +118,29 @@ project-management-main/
     │   └── themeSlice.js        # Dark/light theme state
     ├── components/
     │   ├── Navbar.jsx           # Top navbar with search, theme switch & AuthDialog trigger
-    │   ├── AuthDialog.jsx       # Sign In / Create Account modal
     │   ├── Sidebar.jsx          # Collapsible navigation drawer
+    │   ├── AuthDialog.jsx       # Sign In / Create Account modal
     │   ├── WorkspaceDropdown.jsx# Active workspace selector
     │   ├── WorkspaceSettingsDialog.jsx # Settings modal & data reset
-    │   ├── StatsGrid.jsx        # Metric cards
+    │   ├── DashboardMetrics.jsx # KPI statistics and overview metrics
+    │   ├── DashboardReminders.jsx # Deadlines, urgent tasks, and meetings
+    │   ├── ProjectsList.jsx     # High-priority active projects list
+    │   ├── TeamCollaboration.jsx# Quick team presence and communication
+    │   ├── TimeTracker.jsx      # Interactive sprint/work session tracker
     │   ├── ProjectTasks.jsx     # Task management table with instant status updates
-    │   ├── ProjectCalendar.jsx  # Month calendar with scheduled task navigation
-    │   └── ProjectAnalytics.jsx # Graphical reports with Recharts
+    │   └── ui/                  # Accessible Radix UI design primitives
     └── pages/
+        ├── Landing.jsx          # High-converting product landing page
         ├── Dashboard.jsx        # Workspace dashboard overview
-        ├── Projects.jsx         # Project directory
+        ├── Projects.jsx         # Project directory & creation
         ├── ProjectDetails.jsx   # Project view: Tasks, Calendar, Analytics, Settings
+        ├── Tasks.jsx            # Cross-project workspace task manager
         ├── TaskDetails.jsx      # Task detail view with live discussion comments
-        └── Team.jsx             # Team member directory and invitations
+        ├── Calendar.jsx         # Full-page workspace calendar view
+        ├── Analytics.jsx        # Dedicated analytics and metrics dashboard
+        ├── Team.jsx             # Team member directory and invitations
+        ├── Settings.jsx         # Workspace and profile configurations
+        └── Help.jsx             # Documentation, FAQs, and support center
 ```
 
 ---

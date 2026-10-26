@@ -1,127 +1,153 @@
-import { useState, useMemo } from "react";
-import { useSelector } from "react-redux";
-import { Plus, Search, FolderOpen } from "lucide-react";
-import ProjectCard from "../components/ProjectCard";
-import CreateProjectDialog from "../components/CreateProjectDialog";
+import { useState, useMemo, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { useSearchParams } from 'react-router-dom'
+import { Plus, Search, FolderOpen } from 'lucide-react'
+import ProjectCard from '../components/ProjectCard'
+import CreateProjectDialog from '../components/CreateProjectDialog'
+import { dummyWorkspaces } from '../assets/assets.js'
 
 export default function Projects() {
-    const projects = useSelector(
+    const [searchParams] = useSearchParams()
+    const urlStatus = searchParams.get('status')
+    const urlPriority = searchParams.get('priority')
+
+    const rawProjects = useSelector(
         (state) => state?.workspace?.currentWorkspace?.projects || []
-    );
+    )
+    const projects = useMemo(
+        () => (rawProjects.length > 0 ? rawProjects : (dummyWorkspaces[0]?.projects || [])),
+        [rawProjects]
+    )
 
-    const [searchTerm, setSearchTerm] = useState("");
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('')
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [filters, setFilters] = useState({
-        status: "ALL",
-        priority: "ALL",
-    });
+        status: urlStatus || 'ALL',
+        priority: urlPriority || 'ALL',
+    })
 
-    // Compute filteredProjects declaratively with useMemo
+    useEffect(() => {
+        if (urlStatus) {
+            setFilters((prev) => ({ ...prev, status: urlStatus }))
+        }
+    }, [urlStatus])
+
+    useEffect(() => {
+        if (urlPriority) {
+            setFilters((prev) => ({ ...prev, priority: urlPriority }))
+        }
+    }, [urlPriority])
+
     const filteredProjects = useMemo(() => {
-        let filtered = projects;
+        let filtered = projects
 
         if (searchTerm.trim()) {
-            const q = searchTerm.toLowerCase();
+            const q = searchTerm.toLowerCase()
             filtered = filtered.filter(
                 (project) =>
                     project.name.toLowerCase().includes(q) ||
                     project.description?.toLowerCase().includes(q)
-            );
+            )
         }
 
-        if (filters.status !== "ALL") {
-            filtered = filtered.filter((project) => project.status === filters.status);
+        if (filters.status !== 'ALL') {
+            filtered = filtered.filter((project) => project.status === filters.status)
         }
 
-        if (filters.priority !== "ALL") {
+        if (filters.priority !== 'ALL') {
             filtered = filtered.filter(
                 (project) => project.priority === filters.priority
-            );
+            )
         }
 
-        return filtered;
-    }, [projects, searchTerm, filters]);
+        return filtered
+    }, [projects, searchTerm, filters])
 
     return (
-        <div className="space-y-6 max-w-6xl mx-auto">
+        <div className="space-y-6">
             {/* Header */}
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-1">
+                    <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                         Projects
                     </h1>
-                    <p className="text-gray-500 dark:text-zinc-400 text-sm">
+                    <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                         Manage and track your projects
                     </p>
                 </div>
+
                 <button
+                    type="button"
                     onClick={() => setIsDialogOpen(true)}
-                    className="flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white hover:opacity-90 transition shadow-sm"
+                    className="px-5 py-2.5 rounded-full bg-[#0f172a] hover:bg-slate-800 text-white text-xs sm:text-[13px] font-semibold flex items-center gap-2 transition-all shadow-sm active:scale-[0.98] cursor-pointer"
                 >
-                    <Plus className="size-4 mr-1.5" /> New Project
+                    <Plus className="size-4" strokeWidth={2.5} />
+                    <span>New Project</span>
                 </button>
-                <CreateProjectDialog
-                    isDialogOpen={isDialogOpen}
-                    setIsDialogOpen={setIsDialogOpen}
-                />
             </div>
 
-            {/* Search and Filters */}
-            <div className="flex flex-col sm:flex-row gap-3">
-                <div className="relative flex-1 max-w-sm">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-zinc-400 w-4 h-4 pointer-events-none" />
+            {/* Search and Filters Strip */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <div className="relative flex-1 max-w-md">
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 size-4 pointer-events-none" strokeWidth={2} />
                     <input
+                        type="text"
                         onChange={(e) => setSearchTerm(e.target.value)}
                         value={searchTerm}
-                        className="w-full pl-9 text-xs sm:text-sm pr-4 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                        className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-[#111726] border border-slate-200/90 dark:border-slate-800 rounded-full text-xs sm:text-[13px] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-2xs"
                         placeholder="Search projects by name..."
                     />
                 </div>
-                <select
-                    value={filters.status}
-                    onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-                    className="px-3 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-gray-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                    <option value="ALL">All Statuses</option>
-                    <option value="ACTIVE">Active</option>
-                    <option value="PLANNING">Planning</option>
-                    <option value="COMPLETED">Completed</option>
-                    <option value="ON_HOLD">On Hold</option>
-                    <option value="CANCELLED">Cancelled</option>
-                </select>
-                <select
-                    value={filters.priority}
-                    onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
-                    className="px-3 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-gray-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                    <option value="ALL">All Priorities</option>
-                    <option value="HIGH">High</option>
-                    <option value="MEDIUM">Medium</option>
-                    <option value="LOW">Low</option>
-                </select>
+
+                <div className="flex items-center gap-2.5">
+                    <select
+                        value={filters.status}
+                        onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                        className="px-4 py-2.5 rounded-full bg-white dark:bg-[#111726] border border-slate-200/90 dark:border-slate-800 text-slate-900 dark:text-white text-xs font-semibold outline-none cursor-pointer shadow-2xs"
+                    >
+                        <option value="ALL">All Statuses</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="PLANNING">Planning</option>
+                        <option value="COMPLETED">Completed</option>
+                        <option value="ON_HOLD">On Hold</option>
+                        <option value="CANCELLED">Cancelled</option>
+                    </select>
+
+                    <select
+                        value={filters.priority}
+                        onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
+                        className="px-4 py-2.5 rounded-full bg-white dark:bg-[#111726] border border-slate-200/90 dark:border-slate-800 text-slate-900 dark:text-white text-xs font-semibold outline-none cursor-pointer shadow-2xs"
+                    >
+                        <option value="ALL">All Priorities</option>
+                        <option value="HIGH">High</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="LOW">Low</option>
+                    </select>
+                </div>
             </div>
 
             {/* Projects Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredProjects.length === 0 ? (
-                    <div className="col-span-full text-center py-16 bg-white dark:bg-zinc-900/40 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                        <div className="size-16 mx-auto mb-4 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center">
-                            <FolderOpen className="size-8 text-zinc-400" />
+                    <div className="col-span-full text-center py-16 bg-white dark:bg-[#111726] rounded-[28px] border border-slate-200/90 dark:border-slate-800 shadow-xs">
+                        <div className="size-14 mx-auto mb-3 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400">
+                            <FolderOpen className="size-7" />
                         </div>
-                        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
+                        <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
                             No projects found
                         </h3>
-                        <p className="text-gray-500 dark:text-zinc-400 mb-5 text-xs">
-                            {searchTerm || filters.status !== "ALL" || filters.priority !== "ALL"
-                                ? "Try adjusting your search query or filters"
-                                : "Create your first project to get started"}
+                        <p className="text-slate-400 mb-5 text-xs">
+                            {searchTerm || filters.status !== 'ALL' || filters.priority !== 'ALL'
+                                ? 'Try adjusting your search query or filters'
+                                : 'Create your first project to get started'}
                         </p>
                         <button
+                            type="button"
                             onClick={() => setIsDialogOpen(true)}
-                            className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-medium transition"
+                            className="px-5 py-2.5 rounded-full bg-[#0f172a] hover:bg-slate-800 text-white text-xs font-semibold inline-flex items-center gap-2"
                         >
-                            <Plus className="size-3.5" />
-                            Create Project
+                            <Plus className="size-3.5" strokeWidth={2.5} />
+                            <span>Create Project</span>
                         </button>
                     </div>
                 ) : (
@@ -130,6 +156,8 @@ export default function Projects() {
                     ))
                 )}
             </div>
+
+            <CreateProjectDialog isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
         </div>
-    );
+    )
 }

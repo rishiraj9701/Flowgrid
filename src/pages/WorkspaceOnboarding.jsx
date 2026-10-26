@@ -143,8 +143,8 @@ const WorkspaceOnboarding = () => {
             <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
                 {/* Title */}
                 <div className="text-center max-w-2xl mx-auto mb-10">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/60 mb-3">
-                        <Building2 className="size-3" />
+                    <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 mb-3">
+                        <Building2 className="size-3.5" />
                         <span>Workspace Hub</span>
                     </div>
                     <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-white tracking-tight">

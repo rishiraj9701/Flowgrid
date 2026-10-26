@@ -3,19 +3,37 @@ node_modules
 .pnp
 .pnp.js
 
-# Environment variables & secrets (NEVER commit real credentials)
+# Environment variables & credentials (NEVER commit real credentials)
 .env
 .env.*
 !.env.example
 server/.env
 server/.env.*
 !server/.env.example
+*.env
+*.env.*
+*.local
+*.local.*
 
 # Production build outputs
 dist
 dist-ssr
 build
-*.local
+out
+
+# Test coverage & caches
+coverage
+.nyc_output
+*.lcov
+.cache
+.temp
+.turbo
+
+# Local SQLite or temporary database artifacts
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
 
 # Logs
 npm-debug.log*
@@ -23,6 +41,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+*.log
 
 # Editor & OS files
 .vscode/*
@@ -35,3 +54,4 @@ lerna-debug.log*
 *.sln
 *.sw?
 Thumbs.db
+

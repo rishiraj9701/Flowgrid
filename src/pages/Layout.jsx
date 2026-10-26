@@ -16,20 +16,30 @@ const Layout = () => {
         dispatch(loadTheme())
     }, [dispatch])
 
-    if (loading) return (
-        <div className='flex items-center justify-center h-screen bg-white dark:bg-zinc-950'>
-            <Loader2Icon className="size-7 text-blue-500 animate-spin" />
-        </div>
-    )
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen bg-[#f0f2f5] dark:bg-[#0b0f17]">
+                <Loader2Icon className="size-8 text-blue-600 animate-spin" />
+            </div>
+        )
+    }
 
     return (
-        <div className="flex bg-white dark:bg-zinc-950 text-gray-900 dark:text-slate-100">
+        <div className="flex h-screen w-screen bg-[#eff1f5] dark:bg-[#0b0f18] text-slate-900 dark:text-slate-100 antialiased overflow-hidden p-2 sm:p-3 lg:p-3.5 gap-3 sm:gap-3.5 select-text">
+            {/* Floating Sidebar Card */}
             <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-            <div className="flex-1 flex flex-col h-screen">
+
+            {/* Main Application Container */}
+            <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden relative">
+                {/* Top Navigation Header */}
                 <Navbar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-                <div className="flex-1 h-full p-6 xl:p-10 xl:px-16 overflow-y-scroll">
-                    <Outlet />
-                </div>
+
+                {/* Main Scrollable Canvas */}
+                <main className="flex-1 overflow-y-auto px-2 sm:px-6 py-2 pb-10">
+                    <div className="max-w-[1400px] mx-auto w-full">
+                        <Outlet />
+                    </div>
+                </main>
             </div>
         </div>
     )

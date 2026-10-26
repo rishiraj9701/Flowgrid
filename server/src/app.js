@@ -14,7 +14,9 @@ const app = express();
 // Configure CORS with explicitly allowed origins
 const allowedOrigins = [
   config.FRONTEND_URL,
-  ...(config.NODE_ENV !== "production" ? ["http://localhost:5173", "http://127.0.0.1:5173"] : []),
+  ...(config.NODE_ENV !== "production"
+    ? ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:4173", "http://127.0.0.1:4173"]
+    : []),
 ].filter(Boolean);
 
 app.use(

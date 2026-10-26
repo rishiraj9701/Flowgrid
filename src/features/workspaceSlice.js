@@ -13,7 +13,45 @@ const loadInitialWorkspaces = () => {
             if (saved) {
                 const parsed = JSON.parse(saved);
                 if (Array.isArray(parsed) && parsed.length > 0) {
-                    return parsed;
+                    const canonicalProjects = dummyWorkspaces[0]?.projects || [];
+                    const cleaned = parsed.map((ws) => {
+                        const isNexus = ws.id === "workspace_nexus_01";
+                        const hasOnlyPlaceholder = (ws.projects || []).some((p) => p.name === "LaunchPad CRM");
+                        const projectsToUse = (isNexus || hasOnlyPlaceholder || !ws.projects || ws.projects.length === 0)
+                            ? canonicalProjects
+                            : ws.projects;
+
+                        return {
+                            ...ws,
+                            owner: ws.owner?.name === "Aarav Sharma" ? { ...ws.owner, name: "Rishi Raj", email: "rishi.raj@flowgrid.app" } : ws.owner,
+                            members: (ws.members || []).map((m) =>
+                                m.user?.name === "Aarav Sharma"
+                                    ? { ...m, user: { ...m.user, name: "Rishi Raj", email: "rishi.raj@flowgrid.app" } }
+                                    : m
+                            ),
+                            projects: projectsToUse.map((p) => ({
+                                ...p,
+                                members: (p.members || []).map((pm) =>
+                                    pm.user?.name === "Aarav Sharma"
+                                        ? { ...pm, user: { ...pm.user, name: "Rishi Raj", email: "rishi.raj@flowgrid.app" } }
+                                        : pm
+                                ),
+                                tasks: (p.tasks || []).map((t) => ({
+                                    ...t,
+                                    assignee: t.assignee?.name === "Aarav Sharma"
+                                        ? { ...t.assignee, name: "Rishi Raj", email: "rishi.raj@flowgrid.app" }
+                                        : t.assignee,
+                                })),
+                            })),
+                        };
+                    });
+
+                    // Ensure Nexus Workspace is always present at the top
+                    const hasNexus = cleaned.some((w) => w.id === "workspace_nexus_01");
+                    if (!hasNexus && dummyWorkspaces?.[0]) {
+                        cleaned.unshift(dummyWorkspaces[0]);
+                    }
+                    return cleaned;
                 }
             }
         }
@@ -29,13 +67,16 @@ const loadInitialCurrentWorkspace = (workspaces) => {
             const savedId = localStorage.getItem(STORAGE_KEY_CURRENT);
             if (savedId) {
                 const found = workspaces.find((w) => w.id === savedId);
-                if (found) return found;
+                if (found && (found.id === "workspace_nexus_01" || (found.projects && found.projects.length >= 4))) {
+                    return found;
+                }
             }
         }
     } catch (e) {
         console.error("Failed to load current workspace from localStorage:", e);
     }
-    return workspaces[0] || null;
+    const nexus = workspaces.find((w) => w.id === "workspace_nexus_01");
+    return nexus || workspaces[0] || null;
 };
 
 // Persistence helper for offline demo mode

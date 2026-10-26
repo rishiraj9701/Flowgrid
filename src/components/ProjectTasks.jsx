@@ -15,9 +15,9 @@ const typeIcons = {
 };
 
 const priorityTexts = {
-    LOW: { background: "bg-red-100 dark:bg-red-950/60", prioritycolor: "text-red-700 dark:text-red-400" },
-    MEDIUM: { background: "bg-blue-100 dark:bg-blue-950/60", prioritycolor: "text-blue-700 dark:text-blue-400" },
-    HIGH: { background: "bg-emerald-100 dark:bg-emerald-950/60", prioritycolor: "text-emerald-700 dark:text-emerald-400" },
+    LOW: { background: "bg-slate-100 dark:bg-slate-800", prioritycolor: "text-slate-700 dark:text-slate-300" },
+    MEDIUM: { background: "bg-amber-100 dark:bg-amber-950/60", prioritycolor: "text-amber-700 dark:text-amber-400" },
+    HIGH: { background: "bg-rose-100 dark:bg-rose-950/60", prioritycolor: "text-rose-700 dark:text-rose-400" },
 };
 
 const ProjectTasks = ({ tasks = [] }) => {

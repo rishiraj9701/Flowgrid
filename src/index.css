@@ -2,12 +2,14 @@
 @import "tailwindcss";
 
 * {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .landing-page,
 .landing-page * {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -17,37 +19,40 @@
 }
 
 @layer base {
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 5rem;
+    }
+
     button {
         cursor: pointer;
     }
 
+    /* macOS-style slim translucent scrollbars */
     ::-webkit-scrollbar {
-        width: 0.5rem;
+        width: 6px;
+        height: 6px;
     }
 
     ::-webkit-scrollbar-track {
-        background-color: #e5e7eb;
-    }
-
-    .dark ::-webkit-scrollbar-track {
-        background-color: #1c1c1e;
+        background: transparent;
     }
 
     ::-webkit-scrollbar-thumb {
-        background-color: #bbc3d1;
-        border-radius: 0.375rem;
+        background-color: rgba(0, 0, 0, 0.15);
+        border-radius: 9999px;
     }
 
     .dark ::-webkit-scrollbar-thumb {
-        background-color: #374151;
+        background-color: rgba(255, 255, 255, 0.16);
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        background-color: #99a5bc;
+        background-color: rgba(0, 0, 0, 0.28);
     }
 
     .dark ::-webkit-scrollbar-thumb:hover {
-        background-color: #4b5563;
+        background-color: rgba(255, 255, 255, 0.28);
     }
 
     .dark input[type="date"]::-webkit-calendar-picker-indicator {
@@ -70,4 +75,282 @@
     input[type="checkbox"]:checked {
         background-color: #3b82f6;
     }
+}
+
+/* ── Landing page entrance animations & ambient glow ─────────── */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes ambientPulse {
+    0%, 100% {
+        opacity: 0.55;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.85;
+        transform: scale(1.02);
+    }
+}
+
+@keyframes floatSlow {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes shimmerGlow {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.landing-page .hero-animate-1 {
+    animation: fadeInUp 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: 0ms;
+}
+.landing-page .hero-animate-2 {
+    animation: fadeInUp 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: 70ms;
+}
+.landing-page .hero-animate-3 {
+    animation: fadeInUp 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: 140ms;
+}
+.landing-page .hero-animate-4 {
+    animation: fadeInUp 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: 210ms;
+}
+.landing-page .hero-animate-5 {
+    animation: fadeInUp 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: 280ms;
+}
+.landing-page .hero-animate-mockup {
+    animation: fadeInUp 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: 350ms;
+}
+
+.animate-pulse-slow {
+    animation: ambientPulse 8s ease-in-out infinite;
+}
+
+.animate-float-slow {
+    animation: floatSlow 5s ease-in-out infinite;
+}
+
+/* ── Continuous Ambient SaaS Lighting System ───────────────────── */
+
+.landing-ambient-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.ambient-glow {
+    position: absolute;
+    display: block;
+    pointer-events: none;
+    border-radius: 9999px;
+    filter: blur(85px);
+    will-change: transform, opacity;
+}
+
+/* 1. Hero top subtle ambient lighting */
+.ambient-glow-hero-top {
+    top: -60px;
+    left: 50%;
+    width: 960px;
+    height: 520px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse 65% 55% at 50% 45%, rgba(59, 130, 246, 0.16) 0%, rgba(99, 102, 241, 0.10) 45%, transparent 72%);
+    opacity: 0.9;
+}
+
+.dark .ambient-glow-hero-top {
+    background: radial-gradient(ellipse 65% 55% at 50% 45%, rgba(59, 130, 246, 0.22) 0%, rgba(99, 102, 241, 0.13) 45%, transparent 72%);
+    opacity: 1;
+}
+
+/* 2. Hero preview glow halo (diffuses softly into capabilities and features) */
+.ambient-glow-hero-preview {
+    top: 680px;
+    left: 50%;
+    width: 1040px;
+    height: 580px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse 70% 55% at 50% 50%, rgba(59, 130, 246, 0.14) 0%, rgba(14, 165, 233, 0.08) 50%, transparent 75%);
+    opacity: 0.85;
+}
+
+.dark .ambient-glow-hero-preview {
+    background: radial-gradient(ellipse 70% 55% at 50% 50%, rgba(59, 130, 246, 0.18) 0%, rgba(14, 165, 233, 0.10) 50%, transparent 75%);
+    opacity: 0.95;
+}
+
+/* 3. Features section ambient lighting (left flank) */
+.ambient-glow-features {
+    top: 1450px;
+    left: -120px;
+    width: 700px;
+    height: 650px;
+    background: radial-gradient(circle at 45% 45%, rgba(99, 102, 241, 0.08) 0%, rgba(59, 130, 246, 0.04) 50%, transparent 70%);
+}
+
+.dark .ambient-glow-features {
+    background: radial-gradient(circle at 45% 45%, rgba(99, 102, 241, 0.12) 0%, rgba(59, 130, 246, 0.07) 50%, transparent 70%);
+}
+
+/* 4. Problem & Solution ambient lighting (right flank) */
+.ambient-glow-problem {
+    top: 2350px;
+    right: -120px;
+    width: 750px;
+    height: 700px;
+    background: radial-gradient(circle at 55% 45%, rgba(59, 130, 246, 0.08) 0%, rgba(99, 102, 241, 0.05) 50%, transparent 70%);
+}
+
+.dark .ambient-glow-problem {
+    background: radial-gradient(circle at 55% 45%, rgba(59, 130, 246, 0.12) 0%, rgba(99, 102, 241, 0.07) 50%, transparent 70%);
+}
+
+/* 5. Benefits & Workflow subtle glow */
+.ambient-glow-benefits {
+    top: 3600px;
+    left: -80px;
+    width: 800px;
+    height: 650px;
+    background: radial-gradient(ellipse 70% 60% at 45% 50%, rgba(99, 102, 241, 0.07) 0%, rgba(59, 130, 246, 0.04) 50%, transparent 70%);
+}
+
+.dark .ambient-glow-benefits {
+    background: radial-gradient(ellipse 70% 60% at 45% 50%, rgba(99, 102, 241, 0.10) 0%, rgba(59, 130, 246, 0.06) 50%, transparent 70%);
+}
+
+/* 6. Showcase & FAQ ambient lighting */
+.ambient-glow-showcase {
+    top: 4800px;
+    right: -100px;
+    width: 750px;
+    height: 650px;
+    background: radial-gradient(circle at 55% 45%, rgba(59, 130, 246, 0.07) 0%, rgba(99, 102, 241, 0.04) 50%, transparent 70%);
+}
+
+.dark .ambient-glow-showcase {
+    background: radial-gradient(circle at 55% 45%, rgba(59, 130, 246, 0.10) 0%, rgba(99, 102, 241, 0.06) 50%, transparent 70%);
+}
+
+/* 7. Final CTA ambient focal glow */
+.ambient-glow-cta {
+    bottom: 260px;
+    left: 50%;
+    width: 950px;
+    height: 520px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse 75% 55% at 50% 50%, rgba(59, 130, 246, 0.14) 0%, rgba(99, 102, 241, 0.09) 50%, transparent 72%);
+}
+
+.dark .ambient-glow-cta {
+    background: radial-gradient(ellipse 75% 55% at 50% 50%, rgba(59, 130, 246, 0.20) 0%, rgba(99, 102, 241, 0.12) 50%, transparent 72%);
+}
+
+/* Architectural vertical guides */
+.ambient-grid-guides {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent 0 calc(16.666% - 1px),
+        rgba(99, 102, 241, 0.025) calc(16.666% - 1px) 16.666%
+    );
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.25) 40%, rgba(0, 0, 0, 0.1) 80%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.25) 40%, rgba(0, 0, 0, 0.1) 80%, transparent 100%);
+}
+
+.dark .ambient-grid-guides {
+    background: repeating-linear-gradient(
+        90deg,
+        transparent 0 calc(16.666% - 1px),
+        rgba(99, 102, 241, 0.035) calc(16.666% - 1px) 16.666%
+    );
+}
+
+/* Organic analog noise texture overlay */
+.ambient-noise {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.025;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .landing-page .hero-animate-1,
+    .landing-page .hero-animate-2,
+    .landing-page .hero-animate-3,
+    .landing-page .hero-animate-4,
+    .landing-page .hero-animate-5,
+    .landing-page .hero-animate-mockup,
+    .animate-pulse-slow,
+    .animate-float-slow,
+    .ambient-glow {
+        animation: none !important;
+        transform: none !important;
+    }
+}
+
+/* ── Flowgrid Dashboard Utilities ─────────────────────────────── */
+
+.flowgrid-contour-bg {
+    background-color: #0c1524;
+    background-image: radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.12) 0%, transparent 60%),
+                      repeating-radial-gradient(circle at 50% 120%, transparent 0, transparent 18px, rgba(99, 102, 241, 0.12) 19px, transparent 20px);
+}
+
+.flowgrid-pill-chart-striped {
+    background: repeating-linear-gradient(
+        -45deg,
+        rgba(148, 163, 184, 0.2),
+        rgba(148, 163, 184, 0.2) 4px,
+        rgba(241, 245, 249, 0.6) 4px,
+        rgba(241, 245, 249, 0.6) 8px
+    );
+}
+
+.dark .flowgrid-pill-chart-striped {
+    background: repeating-linear-gradient(
+        -45deg,
+        rgba(100, 116, 139, 0.25),
+        rgba(100, 116, 139, 0.25) 4px,
+        rgba(30, 41, 59, 0.6) 4px,
+        rgba(30, 41, 59, 0.6) 8px
+    );
+}
+
+.flowgrid-gauge-pattern {
+    stroke-dasharray: 4, 3;
 }
