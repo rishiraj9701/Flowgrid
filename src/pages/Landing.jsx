@@ -1311,13 +1311,17 @@ const Landing = () => {
                         {/* Bottom bar */}
                         <div className="pt-8 border-t border-zinc-200/80 dark:border-zinc-800/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500 dark:text-zinc-400">
                             <p>© {new Date().getFullYear()} Flowgrid. All rights reserved.</p>
-                            <div className="flex items-center gap-3">
-                                <span>React 19 &amp; Vite</span>
-                                <span>·</span>
-                                <span>Node.js &amp; Express</span>
-                                <span>·</span>
-                                <span>PostgreSQL &amp; Prisma</span>
-                            </div>
+                            <p>
+                                Designed &amp; Developed by{" "}
+                                <a
+                                    href="https://rishirajshukla.netlify.app/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-medium underline underline-offset-4 text-zinc-700 dark:text-zinc-200 decoration-zinc-400 dark:decoration-zinc-500 hover:text-blue-600 dark:hover:text-blue-400 hover:decoration-blue-600 dark:hover:decoration-blue-400 transition-colors"
+                                >
+                                    Rishi Raj Shukla
+                                </a>
+                            </p>
                         </div>
                     </div>
                 </footer>

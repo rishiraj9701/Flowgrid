@@ -9,6 +9,7 @@ import TeamCollaboration from '../components/TeamCollaboration'
 import ProjectProgressGauge from '../components/ProjectProgressGauge'
 import TimeTracker from '../components/TimeTracker'
 import CreateProjectDialog from '../components/CreateProjectDialog'
+import Footer from '../components/Footer'
 
 const Dashboard = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -75,6 +76,9 @@ const Dashboard = () => {
                     <TimeTracker />
                 </div>
             </div>
+
+            {/* Developer Attribution Footer */}
+            <Footer className="pt-4 pb-2" />
 
             <CreateProjectDialog isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
         </div>
